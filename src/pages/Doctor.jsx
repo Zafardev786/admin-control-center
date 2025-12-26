@@ -217,95 +217,140 @@
 // };
 
 // export default Doctor;
+import React, { useState } from "react";
+import { FaUserMd, FaStar } from "react-icons/fa";
 
-import React, { useEffect, useState } from "react";
-import { FaUserMd } from "react-icons/fa";
+const doctorsData = [
+  {
+    id: 1,
+    name: "Dr. Rajesh Sharma",
+    specialization: "Cardiologist",
+    hospital: "Apollo Hospitals, Delhi",
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db",
+    description:
+      "Senior cardiologist with over 15 years of experience in treating heart diseases, angioplasty, and cardiac surgeries.",
+  },
+  {
+    id: 2,
+    name: "Dr. Anjali Verma",
+    specialization: "Neurologist",
+    hospital: "Fortis Hospital, Mumbai",
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2",
+    description:
+      "Expert neurologist specializing in brain disorders, stroke management, and advanced neurological treatments.",
+  },
+  {
+    id: 3,
+    name: "Dr. Amit Kumar",
+    specialization: "Orthopedic Surgeon",
+    hospital: "AIIMS, Delhi",
+    rating: 4.8,
+    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d",
+    description:
+      "Highly experienced orthopedic surgeon handling joint replacement, fractures, and sports injuries.",
+  },
+  {
+    id: 4,
+    name: "Dr. Neha Singh",
+    specialization: "Gynecologist",
+    hospital: "Max Hospital, Delhi",
+    rating: 4.5,
+    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f",
+    description:
+      "Specialist in women’s health, pregnancy care, infertility treatments, and minimally invasive surgeries.",
+  },
+  {
+    id: 5,
+    name: "Dr. Suresh Patel",
+    specialization: "Dermatologist",
+    hospital: "Medanta, Gurgaon",
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54",
+    description:
+      "Renowned dermatologist treating skin, hair, and cosmetic concerns with modern techniques.",
+  },
+  {
+    id: 6,
+    name: "Dr. Pooja Mehta",
+    specialization: "Pediatrician",
+    hospital: "Manipal Hospital, Bangalore",
+    rating: 4.4,
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
+    description:
+      "Dedicated pediatrician providing comprehensive healthcare for infants, children, and adolescents.",
+  },
+];
 
 const Doctor = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  const fetchDoctors = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://54.167.190.182:8099/retail/admin/doctors"
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch doctors");
-      }
-
-      const data = await res.json();
-      setDoctors(data || []);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load doctors");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔍 Search filter
-  const filteredDoctors = doctors.filter((doc) =>
-    doc.name?.toLowerCase().includes(search.toLowerCase())
+  const filteredDoctors = doctorsData.filter((doc) =>
+    doc.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="p-6">
-      {/* 🔹 Header (Same style as others) */}
-      <div className="flex items-center justify-between bg-white p-6 rounded-lg shadow mb-6">
+    <div className="h-screen bg-gray-50 flex flex-col">
+      {/* 🔹 FIXED HEADER */}
+      <div className="sticky top-0 z-50 bg-white shadow px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FaUserMd className="text-green-600 text-3xl" />
           <h1 className="text-2xl font-bold">Find a Doctor</h1>
         </div>
 
-        <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="Search doctor..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border px-4 py-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search doctor..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border px-4 py-2 rounded-lg w-64 focus:ring-2 focus:ring-green-400"
+        />
       </div>
 
-      {/* 🔹 States */}
-      {loading && <p>Loading doctors...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* 🔹 SCROLLABLE LIST AREA */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {filteredDoctors.map((doc) => (
+            <div
+              key={doc.id}
+              className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+            >
+              <img
+                src={doc.image}
+                alt={doc.name}
+                className="h-48 w-full object-cover"
+              />
 
-      {!loading && !error && filteredDoctors.length === 0 && (
-        <p>No doctors found</p>
-      )}
+              <div className="p-5">
+                <h2 className="text-lg font-bold">{doc.name}</h2>
+                <p className="text-sm text-gray-500">
+                  {doc.specialization} • {doc.hospital}
+                </p>
 
-      {/* 🔹 Doctor Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {filteredDoctors.map((doc, index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-4 shadow bg-white hover:shadow-lg transition"
-          >
-            <h2 className="font-semibold text-lg">
-              {doc.name || "Doctor Name"}
-            </h2>
-            <p className="text-sm text-gray-600">
-              Specialization: {doc.specialization || "General"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Experience: {doc.experience || "0"} years
-            </p>
-            <p className="text-sm text-gray-600">
-              Contact: {doc.contact || "N/A"}
-            </p>
-          </div>
-        ))}
+                <div className="flex items-center gap-1 mt-2 text-yellow-500">
+                  <FaStar />
+                  <span className="text-sm font-semibold text-gray-700">
+                    {doc.rating}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                  {doc.description}
+                </p>
+
+                <div className="flex gap-3 mt-5">
+                  <button className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                    Book
+                  </button>
+                  <button className="flex-1 border border-gray-400 py-2 rounded-lg hover:bg-gray-100">
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

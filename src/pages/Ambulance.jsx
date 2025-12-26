@@ -234,94 +234,139 @@
 // export default Ambulance;
 
 
-import React, { useEffect, useState } from "react";
-import { FaAmbulance } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaAmbulance, FaStar } from "react-icons/fa";
+
+/* 🔹 STATIC AMBULANCE DATA (Hospital-style) */
+const ambulanceData = [
+  {
+    id: 1,
+    name: "Apollo Ambulance Service",
+    location: "New Delhi",
+    rating: 4.7,
+    image:
+      "https://th.bing.com/th/id/R.0e01a0a3d570fefb8e26bda68c0e06dd?rik=mcNzp2wfMfI5XQ&riu=http%3a%2f%2fwww.asm-aetna.com%2fblog%2fwp-content%2fuploads%2fMercedes-Sprinter-Ambulance-ASM-A.jpg&ehk=xB%2b5TokRlcVhZpSTIRKg5mExk36SmDdWcIn9lWrp%2bOU%3d&risl=&pid=ImgRaw&r=0",
+    description:
+      "24x7 emergency ambulance service with advanced life support and trained paramedics.",
+  },
+  {
+    id: 2,
+    name: "Fortis Emergency Ambulance",
+    location: "Mumbai",
+    rating: 4.6,
+    image:
+      "https://tse4.mm.bing.net/th/id/OIP.A1pXHwi2QhA8xcEl4UuR7wHaEY?w=550&h=326&rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Fast-response ambulance service connected with Fortis hospitals across the city.",
+  },
+  {
+    id: 3,
+    name: "AIIMS Emergency Ambulance",
+    location: "Delhi",
+    rating: 4.8,
+    image:
+      "https://tse2.mm.bing.net/th/id/OIP.jou_5BgAQI-cwq5lWS-8hgHaE8?w=612&h=408&rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Government ambulance service providing affordable and reliable emergency care.",
+  },
+  {
+    id: 4,
+    name: "Medanta Life Support",
+    location: "Gurgaon",
+    rating: 4.5,
+    image:
+      "https://tse1.mm.bing.net/th/id/OIP.ErWGFQYO82QH-EsT1uok0wHaFj?w=626&h=470&rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Advanced cardiac and trauma life support ambulances with expert staff.",
+  },
+  {
+    id: 5,
+    name: "Manipal Emergency Services",
+    location: "Bangalore",
+    rating: 4.4,
+    image:
+      "https://tse1.mm.bing.net/th/id/OIP.ErWGFQYO82QH-EsT1uok0wHaFj?w=626&h=470&rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Well-equipped ambulances ensuring quick and safe patient transportation.",
+  },
+  {
+    id: 6,
+    name: "108 Emergency Ambulance",
+    location: "Pan India",
+    rating: 4.6,
+    image:
+      "https://tse1.mm.bing.net/th/id/OIP.ErWGFQYO82QH-EsT1uok0wHaFj?w=626&h=470&rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Nationwide emergency ambulance service supported by government initiatives.",
+  },
+];
 
 const Ambulance = () => {
-  const [ambulances, setAmbulances] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    fetchAmbulances();
-  }, []);
-
-  const fetchAmbulances = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://54.167.190.182:8099/retail/admin/ambulances"
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch ambulances");
-      }
-
-      const data = await res.json();
-      setAmbulances(data || []);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load ambulances");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔍 Search filter
-  const filteredAmbulances = ambulances.filter((amb) =>
-    amb.name?.toLowerCase().includes(search.toLowerCase())
+  const filteredAmbulance = ambulanceData.filter((amb) =>
+    amb.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="p-6">
-      {/* 🔹 Header (Same as Medicine style) */}
-      <div className="flex items-center justify-between bg-white p-6 rounded-lg shadow mb-6">
+    <div className="h-screen bg-gray-50 flex flex-col">
+      {/* 🔹 FIXED HEADER */}
+      <div className="sticky top-0 z-50 bg-white shadow px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FaAmbulance className="text-red-600 text-3xl" />
-          <h1 className="text-2xl font-bold">Find an Ambulance</h1>
+          <h1 className="text-2xl font-bold">Emergency Ambulance</h1>
         </div>
 
-        <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="Search ambulance..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border px-4 py-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-red-400"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search ambulance..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border px-4 py-2 rounded-lg w-64 focus:ring-2 focus:ring-red-400"
+        />
       </div>
 
-      {/* 🔹 States */}
-      {loading && <p>Loading ambulances...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* 🔹 SCROLLABLE LIST */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {filteredAmbulance.map((amb) => (
+            <div
+              key={amb.id}
+              className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+            >
+              <img
+                src={amb.image}
+                alt={amb.name}
+                className="h-48 w-full object-cover"
+              />
 
-      {!loading && !error && filteredAmbulances.length === 0 && (
-        <p>No ambulances found</p>
-      )}
+              <div className="p-5">
+                <h2 className="text-lg font-bold">{amb.name}</h2>
+                <p className="text-sm text-gray-500">{amb.location}</p>
 
-      {/* 🔹 Ambulance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {filteredAmbulances.map((amb, index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-4 shadow bg-white hover:shadow-lg transition"
-          >
-            <h2 className="font-semibold text-lg">
-              {amb.name || "Ambulance Service"}
-            </h2>
-            <p className="text-sm text-gray-600">
-              Type: {amb.type || "Basic"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Contact: {amb.contact || "N/A"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Price: ₹{amb.price || 0}
-            </p>
-          </div>
-        ))}
+                <div className="flex items-center gap-1 mt-2 text-yellow-500">
+                  <FaStar />
+                  <span className="text-sm font-semibold text-gray-700">
+                    {amb.rating}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                  {amb.description}
+                </p>
+
+                <div className="flex gap-3 mt-5">
+                  <button className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                    Call Now
+                  </button>
+                  <button className="flex-1 border border-gray-400 py-2 rounded-lg hover:bg-gray-100">
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,216 +1,127 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { FaHospitalAlt, FaStar } from "react-icons/fa";
 
-// const HOSPITALS = [
-//   {
-//     id: 1,
-//     name: "Apollo Hospitals",
-//     location: "New Delhi, India",
-//     rating: 4.7,
-//     beds: 1200,
-//     type: "Multispeciality",
-//     fee: "₹1500 - ₹5000",
-//     image:
-//       "https://www.medicalbuyer.co.in/wp-content/uploads/2021/10/Apollo-Hospitals-launches-centre-of-excellence-to-boost-critical-care-across-India.jpg",
-//     description:
-//       "Leading multispeciality hospital offering advanced treatments in cardiology, neurology, oncology, and more.",
-//   },
-//   {
-//     id: 2,
-//     name: "Fortis Healthcare",
-//     location: "Mumbai, India",
-//     rating: 4.6,
-//     beds: 950,
-//     type: "Multispeciality",
-//     fee: "₹1200 - ₹4000",
-//     image:
-//       "https://www.healthcareradius.in/cloud/2021/11/15/fortis-escorts.jpg",
-//     description:
-//       "Well-known hospital with expertise in orthopedics, neurosurgery, cardiac sciences and organ transplant.",
-//   },
-//   {
-//     id: 3,
-//     name: "AIIMS",
-//     location: "New Delhi, India",
-//     rating: 4.9,
-//     beds: 2000,
-//     type: "Government",
-//     fee: "₹500 - ₹2000",
-//     image: "https://h-leads.com/wp-content/uploads/2022/09/AIIMS.jpg",
-//     description:
-//       "India’s top government medical institute offering world-class healthcare and education.",
-//   },
-//   {
-//     id: 4,
-//     name: "Max Super Speciality Hospital",
-//     location: "Bengaluru, India",
-//     rating: 4.5,
-//     beds: 800,
-//     type: "Multispeciality",
-//     fee: "₹1000 - ₹3500",
-//     image:
-//       "https://tse4.mm.bing.net/th/id/OIP.nDr31OH6H7NoOTdjzSZqLQAAAA",
-//     description:
-//       "Known for liver transplant, cancer care, and advanced robotic surgeries.",
-//   },
-// ];
-
-// function StarRating({ rating }) {
-//   return (
-//     <div className="flex items-center gap-1 text-sm">
-//       <span className="text-yellow-500">★</span>
-//       <span className="font-medium text-gray-700">
-//         {rating.toFixed(1)}
-//       </span>
-//     </div>
-//   );
-// }
-
-// function Hospital() {
-//   const navigate = useNavigate();
-//   const [query, setQuery] = useState("");
-//   const [filter, setFilter] = useState("all");
-
-//   const filtered = HOSPITALS.filter((h) => {
-//     const q = query.toLowerCase().trim();
-//     if (q && !(`${h.name} ${h.type} ${h.location}`.toLowerCase().includes(q)))
-//       return false;
-//     if (filter !== "all" && h.type.toLowerCase() !== filter) return false;
-//     return true;
-//   });
-
-//   const types = Array.from(
-//     new Set(HOSPITALS.map((h) => h.type.toLowerCase()))
-//   );
-
-//   return (
-//     <div className="bg-gray-50 min-h-screen flex flex-col">
-//       {/* Header */}
-//       <div className="bg-white py-5 px-6 shadow-md sticky top-0 z-50">
-//         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between gap-4">
-//           <h1 className="text-3xl font-bold">🏥 Find a Hospital</h1>
-
-//           <div className="flex gap-3">
-//             <input
-//               value={query}
-//               onChange={(e) => setQuery(e.target.value)}
-//               placeholder="Search hospital..."
-//               className="px-4 py-2 rounded-lg border"
-//             />
-
-//             <select
-//               value={filter}
-//               onChange={(e) => setFilter(e.target.value)}
-//               className="px-4 py-2 rounded-lg border"
-//             >
-//               <option value="all">All Types</option>
-//               {types.map((t) => (
-//                 <option key={t} value={t}>
-//                   {t}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Hospital Cards */}
-//       <div className="max-w-7xl mx-auto mt-8 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
-//         {filtered.map((h) => (
-//           <article
-//             key={h.id}
-//             className="bg-white rounded-2xl shadow-md hover:shadow-xl transition"
-//           >
-//             <img
-//               src={h.image}
-//               alt={h.name}
-//               className="w-full h-44 object-cover"
-//             />
-
-//             <div className="p-5 space-y-2">
-//               <h2 className="font-semibold text-lg">{h.name}</h2>
-//               <p className="text-sm text-gray-500">{h.location}</p>
-
-//               <StarRating rating={h.rating} />
-
-//               <p className="text-sm text-gray-600 line-clamp-2">
-//                 {h.description}
-//               </p>
-
-//               <div className="mt-4 flex gap-2">
-//                 <button className="flex-1 bg-green-600 text-white py-2 rounded-lg">
-//                   Book
-//                 </button>
-
-//                 <button
-//                   onClick={() =>
-//                     navigate("/hospital-details", { state: h })
-//                   }
-//                   className="flex-1 border py-2 rounded-lg hover:bg-gray-100"
-//                 >
-//                   Details
-//                 </button>
-//               </div>
-//             </div>
-//           </article>
-//         ))}
-
-//         {filtered.length === 0 && (
-//           <p className="text-gray-600 col-span-full">
-//             No hospitals match your search.
-//           </p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Hospital;
-import React, { useEffect, useState } from "react";
-import { FaHospital } from "react-icons/fa";
+/* 🔹 STATIC 10 HOSPITAL DATA */
+const hospitalsData = [
+  {
+    id: 1,
+    name: "Apollo Hospitals",
+    location: "New Delhi, India",
+    rating: 4.7,
+    type: "Private",
+    image: "https://images.livemint.com/img/2021/09/10/1600x900/apollo_1594043446600_1594043458522_1631255542658.jpg",
+    description:
+      "Leading multispeciality hospital offering advanced treatments in cardiology, neurology, oncology, and more.",
+  },
+  {
+    id: 2,
+    name: "Fortis Healthcare",
+    location: "Mumbai, India",
+    rating: 4.6,
+    type: "Private",
+    image: "https://bl-i.thgim.com/public/incoming/zuqan/article66131773.ece/alternates/FREE_1200/Fortis-01.jpg",
+    description:
+      "Well-known hospital with expertise in orthopedics, neurosurgery, cardiac sciences and organ transplant.",
+  },
+  {
+    id: 3,
+    name: "AIIMS",
+    location: "New Delhi, India",
+    rating: 4.9,
+    type: "Government",
+    image: "https://tse1.mm.bing.net/th/id/OIP.kET3DtDE-a3YZSZfYaHczQHaEy?rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "India’s top government medical institute offering world-class healthcare and education.",
+  },
+  {
+    id: 4,
+    name: "Max Super Speciality",
+    location: "Delhi, India",
+    rating: 4.5,
+    type: "Private",
+    image: "https://tse4.mm.bing.net/th/id/OIP.dsU9BVUpzJ3650Iqes8qhQHaE7?rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Advanced healthcare services with modern infrastructure and expert doctors.",
+  },
+  {
+    id: 5,
+    name: "Medanta",
+    location: "Gurgaon, India",
+    rating: 4.8,
+    type: "Private",
+    image: "https://mir-s3-cdn-cf.behance.net/projects/404/2100b5111982037.Y3JvcCw4MDgsNjMyLDAsMA.jpg",
+    description:
+      "Renowned multispeciality hospital with world-class treatment facilities.",
+  },
+  {
+    id: 6,
+    name: "Manipal Hospital",
+    location: "Bangalore, India",
+    rating: 4.6,
+    type: "Private",
+    image: "https://tse1.mm.bing.net/th/id/OIP.6mXmsGsMlt-j8RBKL5XThAHaDs?rs=1&pid=ImgDetMain&o=7&rm=3",
+    description:
+      "Trusted healthcare provider offering comprehensive medical services.",
+  },
+  {
+    id: 7,
+    name: "Safdarjung Hospital",
+    location: "New Delhi, India",
+    rating: 4.3,
+    type: "Government",
+    image: "https://upload.wikimedia.org/wikipedia/commons/6/66/Safdarjung_Hospital.jpg",
+    description:
+      "Major government hospital providing affordable healthcare.",
+  },
+  {
+    id: 8,
+    name: "Kokilaben Hospital",
+    location: "Mumbai, India",
+    rating: 4.7,
+    type: "Private",
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Kokilaben_Dhirubhai_Ambani_Hospital.jpg",
+    description:
+      "Advanced multispeciality hospital with modern technology.",
+  },
+  {
+    id: 9,
+    name: "NIMS Hospital",
+    location: "Hyderabad, India",
+    rating: 4.4,
+    type: "Government",
+    image: "https://upload.wikimedia.org/wikipedia/commons/4/4d/NIMS_Hospital_Hyderabad.jpg",
+    description:
+      "Top government medical institute in Telangana.",
+  },
+  {
+    id: 10,
+    name: "Ruby Hall Clinic",
+    location: "Pune, India",
+    rating: 4.5,
+    type: "Private",
+    image: "https://upload.wikimedia.org/wikipedia/commons/1/12/Ruby_Hall_Clinic.jpg",
+    description:
+      "Well-known hospital with a strong reputation for patient care.",
+  },
+];
+;
 
 const Hospital = () => {
-  const [hospitals, setHospitals] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
+  const [type, setType] = useState("All");
 
-  useEffect(() => {
-    fetchHospitals();
-  }, []);
-
-  const fetchHospitals = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://54.167.190.182:8099/retail/admin/hospitals"
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch hospitals");
-      }
-
-      const data = await res.json();
-      setHospitals(data || []);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load hospitals");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔍 Search filter
-  const filteredHospitals = hospitals.filter((hospital) =>
-    hospital.name?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredHospitals = hospitalsData.filter((hospital) => {
+    const matchSearch = hospital.name.toLowerCase().includes(search.toLowerCase());
+    const matchType = type === "All" || hospital.type === type;
+    return matchSearch && matchType;
+  });
 
   return (
-    <div className="p-6">
-      {/* 🔹 Header (Medicine style) */}
-      <div className="flex items-center justify-between bg-white p-6 rounded-lg shadow mb-6">
+    <div className="bg-gray-50 h-screen">
+      {/* 🔹 FIXED HEADER */}
+      <div className="fixed top-5 left-60 right-0  bg-white p-5 shadow z-50 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <FaHospital className="text-blue-600 text-3xl" />
+          <FaHospitalAlt className="text-pink-500 text-3xl" />
           <h1 className="text-2xl font-bold">Find a Hospital</h1>
         </div>
 
@@ -220,44 +131,65 @@ const Hospital = () => {
             placeholder="Search hospital..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border px-4 py-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="border px-4 py-2 rounded-lg w-64 focus:ring-2 focus:ring-pink-400"
           />
+
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="border px-4 py-2 rounded-lg"
+          >
+            <option value="All">All Types</option>
+            <option value="Private">Private</option>
+            <option value="Government">Government</option>
+          </select>
         </div>
       </div>
 
-      {/* 🔹 States */}
-      {loading && <p>Loading hospitals...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {/* 🔹 SCROLLABLE LIST */}
+      <div className="pt-28 px-6 h-[calc(100vh-7rem)] overflow-y-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {filteredHospitals.map((hospital) => (
+            <div
+              key={hospital.id}
+              className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+            >
+              <img
+                src={hospital.image}
+                alt={hospital.name}
+                className="h-48 w-full object-cover"
+              />
 
-      {!loading && !error && filteredHospitals.length === 0 && (
-        <p>No hospitals found</p>
-      )}
+              <div className="p-5">
+                <h2 className="text-lg font-bold">{hospital.name}</h2>
+                <p className="text-sm text-gray-500">{hospital.location}</p>
 
-      {/* 🔹 Hospital Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {filteredHospitals.map((hospital, index) => (
-          <div
-            key={index}
-            className="border rounded-lg p-4 shadow bg-white hover:shadow-lg transition"
-          >
-            <h2 className="font-semibold text-lg">
-              {hospital.name || "Hospital Name"}
-            </h2>
-            <p className="text-sm text-gray-600">
-              Type: {hospital.type || "General"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Location: {hospital.city || "N/A"}
-            </p>
-            <p className="text-sm text-gray-600">
-              Contact: {hospital.contact || "N/A"}
-            </p>
-          </div>
-        ))}
+                <div className="flex items-center gap-1 mt-2 text-yellow-500">
+                  <FaStar />
+                  <span className="text-sm font-semibold text-gray-700">
+                    {hospital.rating}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                  {hospital.description}
+                </p>
+
+                <div className="flex gap-3 mt-5">
+                  <button className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                    Book
+                  </button>
+                  <button className="flex-1 border border-gray-400 py-2 rounded-lg hover:bg-gray-100">
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Hospital;
-
